@@ -3,22 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rohit Gupta - Senior SDET | Interactive Resume</title>
+    <title>Rohit Gupta - Senior SDET</title>
+    <!-- Favicon: Using a simple, professional SVG for a document icon -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236B46C1'%3E%3Cpath d='M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6zM8 12h8v2H8zm0 4h8v2H8zm0-8h2v2H8z'/%3E%3C/svg%3E">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
     <script>
         // Mapping of skills to proficiency levels
         const skillProficiency = {
-            'Playwright': 'Intermediate (3 yrs)',
-            'WDIO': 'Advanced (6 yrs)',
-            'Selenium': 'Expert (7+ yrs)',
-            'JavaScript': 'Expert (7+ yrs)',
-            'TypeScript': 'Advanced (5 yrs)',
+            'Playwright': 'Intermediate (2 yrs)',
+            'WDIO': 'Advanced (4 yrs)',
+            'Selenium': 'Expert (6+ yrs)',
+            'JavaScript': 'Expert (6+ yrs)',
+            'TypeScript': 'Advanced (4 yrs)',
             'Python': 'Intermediate (4 yrs)',
-            'Jenkins': 'Advanced (6 yrs)',
-            'Postman': 'Expert (7+ yrs)',
-            'JMeter': 'Advanced (5 yrs)',
-            'Docker': 'Intermediate (4 yrs)',
-            'AI Tools': 'Intermediate (3 yrs)',
+            'Jenkins': 'Advanced (5 yrs)',
+            'Postman': 'Expert (5+ yrs)',
+            'JMeter': 'Advanced (2 yrs)',
+            'Docker': 'Intermediate (3 yrs)',
+            'AI Tools': 'Intermediate (2 yrs)',
         };
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -100,11 +103,52 @@
             z-index: 1000;
             font-family: 'Inter', sans-serif;
         }
+
+        /* Print styles for PDF optimization */
+        @media print {
+            body {
+                background-color: #fff;
+                color: #000;
+                /* Reset margins and padding for clean print output */
+                margin: 0;
+                padding: 0;
+            }
+            .hide-on-print {
+                display: none !important;
+            }
+            header {
+                box-shadow: none;
+                position: relative;
+                top: 0;
+                padding-bottom: 2rem;
+            }
+            main {
+                padding-top: 0;
+            }
+            .timeline-card {
+                /* Ensure all content is visible in PDF */
+                max-height: none !important;
+                height: auto !important;
+                overflow: visible !important;
+            }
+            .timeline-item-content {
+                max-height: 1000px !important;
+                opacity: 1 !important;
+                overflow: visible !important;
+                transition: none !important;
+            }
+            .timeline-card h3 {
+                margin-top: 0 !important;
+            }
+            .timeline-item-content p {
+                padding-bottom: 5px;
+            }
+        }
     </style>
 </head>
 <body class="antialiased">
 
-    <header id="header" class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+    <header id="header" class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm hide-on-print">
         <div class="container mx-auto px-6 py-4">
             <div class="flex justify-between items-center">
                 <div>
@@ -120,6 +164,8 @@
                     <a href="#education" class="nav-link font-medium pb-1">Education</a>
                 </nav>
                 <div class="hidden md:flex items-center space-x-4">
+                    <!-- New button for PDF Download -->
+                    <a href="#" id="download-pdf-btn" class="bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">Download as PDF</a>
                     <a href="#" id="contact-btn-desktop" class="bg-purple-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors">Email Me</a>
                     <a href="#" id="call-btn-desktop" class="bg-green-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">Call Me</a>
                 </div>
@@ -151,8 +197,8 @@
                     <h3 class="text-xl font-semibold mb-2">Automation & Frameworks</h3>
                     <ul class="text-gray-700 list-disc list-inside">
                         <li><strong>Web:</strong> Playwright, WDIO, Selenium</li>
-                        <li><strong>Mobile:</strong> Appium, Espresso</li>
-                        <li><strong>APIs:</strong> Rest Assured, Pytest</li>
+                        <li><strong>Mobile:</strong> Appium, Espresso, XCUITest</li>
+                        <li><strong>APIs:</strong> Rest Assured, Cypress</li>
                     </ul>
                 </div>
                 <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
@@ -361,7 +407,7 @@
 
     </main>
     
-    <footer class="bg-gray-800 text-white">
+    <footer class="bg-gray-800 text-white hide-on-print">
         <div class="container mx-auto px-6 py-8 text-center">
             <h3 class="text-2xl font-bold mb-2">Contact Details</h3>
             <p class="mb-4">Ready to elevate your QA automation and streamline your release cycles? Let's connect.</p>
@@ -434,6 +480,7 @@
 
             const contactButtonDesktop = document.getElementById('contact-btn-desktop');
             const callButtonDesktop = document.getElementById('call-btn-desktop');
+            const downloadPdfButton = document.getElementById('download-pdf-btn');
             const clipboardMessage = document.getElementById('clipboard-message');
 
             const copyToClipboard = (text, successMessage, errorMessage) => {
@@ -474,6 +521,26 @@
                 callButtonDesktop.addEventListener('click', (event) => {
                     event.preventDefault();
                     copyToClipboard('+918909319910', 'Phone number copied!', 'Failed to copy.');
+                });
+            }
+
+            if (downloadPdfButton) {
+                downloadPdfButton.addEventListener('click', () => {
+                    // This change is the core of the fix.
+                    // Instead of just the 'main' element, we target the entire body content.
+                    const bodyElement = document.body;
+                    if (bodyElement) {
+                        const opt = {
+                            margin: 10,
+                            filename: 'Rohit_Gupta_Resume.pdf',
+                            image: { type: 'jpeg', quality: 0.98 },
+                            html2canvas: { scale: 2 },
+                            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                        };
+                        html2pdf().set(opt).from(bodyElement).save();
+                    } else {
+                        console.error('Body element not found for PDF conversion.');
+                    }
                 });
             }
         });
